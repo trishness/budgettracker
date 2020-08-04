@@ -39,7 +39,15 @@ function checkDatabase() {
                   Accept: "application/json, text/plain, */*",
                   "Content-Type": "application/json"
                 }
-              })  
-        }
+              })
+            .then(response => response.json())
+            .then(() => {
+          const transaction = db.transaction(["budget"], "readwrite")
+          const pendingStore = transaction.objectStore("budget")
+          pendingStore.clear();
+      });
     }
+  };
 }
+
+window.addEventListener("online", checkDatabase);
